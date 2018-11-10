@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DKIT</title>
+        <style>
+            #canvas
+            {
+                border:2px solid black;
+                width: 600px;
+                height:600px;
+                margin: 0 auto;
+                display: block;
+                overflow: hidden;
+            }
+
+            #loadingMessage
+            {
+                position:absolute;
+                top:100px;
+                left:100px;
+                z-index:100;
+                font-size:50px;
+            }
+        </style>
+
+        <script>
+            var CANVAS_WIDTH = 600;
+            var CANVAS_HEIGHT = 600;
+
+            var canvas;
+            var ctx;
+
+            /* Animation array */
+            var animation = [];
+            var numbers = "10101010101010101";
+            numbers = numbers.split("");
+            var drops = [];
+            var font_size = 15;
+            var text;
+            var columns;
+            var m;
+            var matrixInterval = null;
+            var z = CANVAS_HEIGHT;
+
+            window.onload = onAllAssetsLoaded;
+            document.write("<div id='loadingMessage'>Loading...</div>");
+            function onAllAssetsLoaded()
+            {
+                // kill the webpage loading message
+                document.getElementById('loadingMessage').style.visibility = "hidden";
+
+                canvas = document.getElementById("canvas");
+                ctx = canvas.getContext("2d");
+
+
+
+                canvas.width = CANVAS_WIDTH;
+                canvas.height = CANVAS_HEIGHT;
+                columns = canvas.width / font_size;
+    
+
+                animation[0] = new ImageAnimation(0, "dkit.jpg");
+                animation[1] = new TextAnimation(4500, CANVAS_WIDTH, 200, 100, "Welcome", 50, "#0F0");
+                animation[2] = new TextAnimation(6500, CANVAS_WIDTH, 270, 135, "to", 50, "#0f0");
+                animation[3] = new TextAnimation(7500, CANVAS_WIDTH, 210, 200, "DkIT", 80, "#0f0");
+                animation[4] = new ImageAnimation(10500, "dkit3.jpg");
+                animation[5] = new TextAnimation2(13500, 0 - CANVAS_WIDTH, 60, 80, "Still thinking about what courses would suit you?", 25, "red");
+                animation[6] = new ImageAnimation2(19500);
+                animation[7] = new ImageAnimation3(22000, "students.jpg");
+                animation[8] = new TextAnimation3(25500, 110, 50, CANVAS_HEIGHT, "Apply for the Department of Visual & Human-Centred Computing", 15, "#0F0");
+                animation[9] = new TextAnimation3(27500, 140, 80, CANVAS_HEIGHT, "Embrace your potential as a :", 30, "#0F0");
+                animation[10] = new TextAnimation3(29500, 180, 110, CANVAS_HEIGHT, "Programmer", 20, "white");
+                animation[11] = new TextAnimation3(30000, 180, 140, CANVAS_HEIGHT, "Web Designer", 20, "white");
+                animation[12] = new TextAnimation3(30500, 180, 170, CANVAS_HEIGHT, "Software Developer", 20, "white");
+                animation[13] = new TextAnimation3(33000, 130, 560, CANVAS_HEIGHT, "There are many more options!", 30, "#0F0");
+                animation[14] = new ImageAnimation(36000, "Computer.jpg");
+                animation[15] = new TextAnimation4(40000);
+                //animation[0] = new MatrixAnimation(000);
+
+
+ 
+
+
+                renderCanvas();
+            }
+
+            function ImageAnimation(animationStartDelay, picture)
+            {
+                /* These three are ALWAYS needed */
+                var animationInterval = null;
+                var ANIMATION_SPEED = 5; // change to suit the animation speed in milliseconds. Smaller numbers give a faster animation */
+                var animationIsDisplayed = false;
+
+                /* These variables depend on the animation */
+                var x = 0;
+                var y = 0;
+                var size = 0;
+
+                var image = new Image();
+                image.src = picture;
+
+                /* Make sure that the image has loaded before starting the animation */
+                image.onload = function ()
+                {
+                    /* Start the animation */
+                    setTimeout(start, animationStartDelay);
+                }
+
+
+                /* Public functions */
+                this.start = start;
+                function start()
+                {
+                    animationIsDisplayed = true;
+                    animationInterval = setInterval(update, ANIMATION_SPEED);
+                }
+
+
+                this.stop = stop;
+                function stop()
+                {
+                    animationIsDisplayed = true;
+                    clearInterval(animationInterval);
+                    animationInterval = null; // set to null when not running
+                }
+
+
+                this.kill = kill;
+                function kill()
+                {
+                    stop();
+                    animationIsDisplayed = false;
+                }
+
+
+                this.update = update;
+                function update()
+                {
+                    size++;
+
+                    if (size === CANVAS_WIDTH)
+                    {
+                        stop();
+                    }
+                }
+
+
+                this.render = render;
+                function render()
+                {
+                    if (animationIsDisplayed)
+                    {
+                        ctx.drawImage(image, x, y, size, size);
+                    }
+                }
+            }
+
+            function ImageAnimation2(animationStartDelay)
+            {
+                /* These three are ALWAYS needed */
+                var animationInterval = null;
+                var ANIMATION_SPEED = 5; // change to suit the animation speed in milliseconds. Smaller numbers give a faster animation */
+                var animationIsDisplayed = false;
+
+
+                var images = [];
+                images[0] = new Image();
+                images[0].src = "nurse.jpg";
+                images[1] = new Image();
+                images[1].src = "accountant2.jpg";
+                images[2] = new Image();
+                images[2].src = "construct.jpg";
+                images[3] = new Image();
+                images[3].src = "lawyer.jpg";
+
+
+                /* These variables depend on the animation */
+                var x = 0;
+                var y = 0;
+                var size = 0;
+
+                setTimeout(start, animationStartDelay);
+
+
+
+                /* Public functions */
+                this.start = start;
+                function start()
+                {
+                    animationIsDisplayed = true;
+                    animationInterval = setInterval(update, ANIMATION_SPEED);
+                }
+
+
+                this.stop = stop;
+                function stop()
+                {
+                    animationIsDisplayed = true;
+                    clearInterval(animationInterval);
+                    animationInterval = null; // set to null when not running
+                }
+
+
+                this.kill = kill;
+                function kill()
+                {
+                    stop();
+                    animationIsDisplayed = false;
+                }
+
+
+                this.update = update;
+                function update()
+                {
+                    size++;
+
+                    if (size === CANVAS_WIDTH / 2)
+                    {
+                        stop();
+                    }
+                }
+
+
+                this.render = render;
+                function render()
+                {
+                    if (animationIsDisplayed)
+                    {
+                        ctx.drawImage(images[0], 0, 0, size, size);
+                        ctx.drawImage(images[1], CANVAS_WIDTH - size, 0, size, size);
+                        ctx.drawImage(images[2], 0, CANVAS_HEIGHT - size, size, size);
+                        ctx.drawImage(images[3], CANVAS_WIDTH - size, CANVAS_HEIGHT - size, size, size);
+
+                    }
+
+                }
+            }
+
+            function TextAnimation(animationStartDelay, x, minX, y, message, fontSize, textColour)
+            {
+                /* These three are ALWAYS needed */
+                var animationInterval = null;
+                var ANIMATION_SPEED = 5; // change to suit the animation speed in milliseconds. Smaller numbers give a faster animation */
+                var animationIsDisplayed = false;
+
+
+
+                /* Start the animation */
+                setTimeout(start, animationStartDelay);
+
+
+                /* Public functions */
+                this.start = start;
+                function start()
+                {
+                    animationIsDisplayed = true;
+                    animationInterval = setInterval(update, ANIMATION_SPEED);
+                }
+
+
+                this.stop = stop;
+                function stop()
+                {
+                    animationIsDisplayed = true;
+                    clearInterval(animationInterval);
+                    animationInterval = null; // set to null when not running
+                }
+
+
+                this.kill = kill;
+                function kill()
+                {
+                    stop();
+                    animationIsDisplayed = false;
+                }
+
+
+                this.update = update;
+                function update()
+                {
+                    x--;
+                    if (x === minX)
+                    {
+                        stop();
+                    }
+                }
+
+
+
+                this.render = render;
+                function render()
+                {
+                    if (animationIsDisplayed)
+                    {
+                        ctx.fillStyle = textColour;
+                        ctx.font = fontSize + "px Times Roman";
+                        ctx.fillText(message, x, y);
+                    }
+                }
+            }
+
+            function TextAnimation2(animationStartDelay, x, maxX, y, message, fontSize, textColour)
+            {
+                var animationInterval = null;
+                var ANIMATION_SPEED = 5;
+                var animationIsDisplayed = false;
+                var maxX;
+
+                setTimeout(start, animationStartDelay);
+
+                this.start = start;
+                function start()
+                {
+                    animationIsDisplayed = true;
+                    animationInterval = setInterval(update, ANIMATION_SPEED);
+                }
+
+                this.stop = stop;
+                function stop()
+                {
+                    animationIsDisplayed = true;
+                    clearInterval(animationInterval);
+                    animationInterval = null; // set to null when not running
+                }
+
+
+                this.kill = kill;
+                function kill()
+                {
+                    stop();
+                    animationIsDisplayed = false;
+                }
+
+
+                this.update = update;
+                function update()
+                {
+                    x++;
+                    if (x === maxX)
+                    {
+                        stop();
+                    }
+                }
+
+                this.render = render;
+                function render()
+                {
+                    if (animationIsDisplayed)
+                    {
+                        ctx.fillStyle = textColour;
+                        ctx.font = fontSize + "px Times Roman";
+                        ctx.fillText(message, x, y);
+                    }
+                }
+            }
+            function TextAnimation3(animationStartDelay, x, minY, y, message, fontSize, textColour)
+            {
+                /* These three are ALWAYS needed */
+                var animationInterval = null;
+                //   var ANIMATION_SPEED = 0; // change to suit the animation speed in milliseconds. Smaller numbers give a faster animation */
+                var animationIsDisplayed = false;
+
+
+
+                /* Start the animation */
+                setTimeout(start, animationStartDelay);
+
+
+                /* Public functions */
+                this.start = start;
+                function start()
+                {
+                    animationIsDisplayed = true;
+                    animationInterval = setInterval(update, 0);
+                }
+
+
+                this.stop = stop;
+                function stop()
+                {
+                    animationIsDisplayed = true;
+                    clearInterval(animationInterval);
+                    animationInterval = null; // set to null when not running
+                }
+
+
+                this.kill = kill;
+                function kill()
+                {
+                    stop();
+                    animationIsDisplayed = false;
+                }
+
+
+                this.update = update;
+                function update()
+                {
+                    y--;
+                    if (y === minY)
+                    {
+                        stop();
+                    }
+                }
+
+
+
+                this.render = render;
+                function render()
+                {
+                    if (animationIsDisplayed)
+                    {
+                        ctx.fillStyle = textColour;
+                        ctx.font = fontSize + "px Times Roman";
+                        ctx.fillText(message, x, y);
+                    }
+                }
+            }
+
+            function TextAnimation4(animationStartDelay)
+            {
+                var animationInterval = null;
+                var ANIMATION_SPEED = 5;
+                var animationIsDisplayed = false;
+
+                var n = 0;
+                var components = [0, 0, 0];
+                var operations = [1, 2, 3];
+
+                setTimeout(start, animationStartDelay);
+
+                this.start = start;
+                function start()
+                {
+                    animationIsDisplayed = true;
+                    animationInterval = setInterval(render, ANIMATION_SPEED);
+                }
+                this.stop = stop;
+                function stop()
+                {
+                    animationIsDisplayed = true;
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                }
+                this.kill = kill;
+                function kill()
+                {
+                    stop();
+                    animationIsDisplayed = false;
+                }
+
+
+                this.render = render;
+                function render()
+                {
+                    if (animationIsDisplayed)
+                    {
+                        ctx.save();
+                        ctx.translate(300, 100);
+                        ctx.rotate(0.01 * n++);
+                        ctx.font = "2em Optimer";
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = 'red';
+                        ctx.fillText("JOIN COMPUTER SCIENCE", 0, 0);
+                        ctx.restore();
+
+                        for (var i = 0; i < 3; i++)
+                        {
+                            components[i] += operations[i];
+
+                            if ((components[i] >= 256) || (components[i] <= 0))
+                            {
+                                operations[i] *= -1;
+                            }
+
+                        }
+                        if (n < 5)
+                        {
+                            setTimeout(start, animationStartDelay);
+                        } else
+                        {
+                            stop();
+                        }
+                    }
+                }
+            }
+
+            function ImageAnimation3(animationStartDelay, picture)
+            {
+                var animationInterval = null;
+                var ANIMATION_SPEED = 5;
+                var animationIsDisplayed = false;
+
+                var image = new Image();
+                image.src = picture;
+
+                var x = 0;
+                var y = 0;
+                var size = 0;
+
+                setTimeout(start, animationStartDelay);
+
+
+                this.start = start;
+                function start()
+                {
+                    animationIsDisplayed = true;
+                    animationInterval = setInterval(update, ANIMATION_SPEED);
+                }
+
+
+                this.stop = stop;
+                function stop()
+                {
+                    animationIsDisplayed = true;
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                }
+
+
+                this.kill = kill;
+                function kill()
+                {
+                    stop();
+                    animationIsDisplayed = false;
+                }
+
+
+                this.update = update;
+                function update()
+                {
+                    size++;
+                    if (size === CANVAS_WIDTH)
+                    {
+                        stop();
+                    }
+                }
+
+                this.render = render;
+                function render()
+                {
+                    if (animationIsDisplayed)
+                    {
+                        ctx.drawImage(image, x, y, size, size);
+                    }
+                }
+            }
+
+            function MatrixAnimation(animationStartDelay)
+            {
+                var animationInterval = null;
+                var ANIMATION_SPEED = 5;
+                var animationIsDisplayed = false;
+                var font_size = 15;
+                var text;
+                var columns;
+                var m;
+                var matrixInterval = null;
+                var z = CANVAS_HEIGHT;
+                var numbers = "10101010101010101";
+                numbers = numbers.split("");
+                var drops = [];
+
+             setTimeout(start, animationStartDelay);
+
+            this.start = start;
+            function start()
+            {   
+                animationIsDisplayed = true;
+                setInterval(render, 55);
+                 
+                
+            }
+            
+            this.render = render;
+              function render()
+            {
+                if (animationIsDisplayed)
+                    { 
+                        setInterval(render, 55);
+            for (var m = 0; m < columns; m++)
+                {
+                    drops[m] = 0;
+                }
+                
+                 ctx.beginPath();
+                ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#0F0"; //green text
+                ctx.font = font_size + "px arial";
+                ctx.closePath();
+                
+               
+               
+                
+                
+                for (var i = 0; i < drops.length; i++)
+                {
+                    text = numbers[Math.floor(Math.random() * numbers.length)];
+
+                    ctx.fillText(text, i * font_size, drops[i] * font_size);
+
+                    if (drops[i] * font_size > canvas.height && Math.random() > 0.975)
+                    {
+                        drops[i] = 0;
+                    }
+                        drops[i]++;
+               // ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            }
+                    }
+            }
+        }
+
+
+
+            function renderCanvas()
+            {
+                requestAnimationFrame(renderCanvas);
+                ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+                for (var i = 0; i < animation.length; i++)
+                {
+                    animation[i].render();
+                }
+            }
+
+
+        </script>
+    </head>
+
+    <body>
+        <canvas id = "canvas" tabindex="1">
+            <div class="txtStyle">STROKE-ON CANVAS</div>
+            Your browser does not support the HTML5 'Canvas' tactx.
+        </canvas>
+    </body>
+</html>
